@@ -31,17 +31,27 @@ async function build() {
     { recursive: true }
   );
 
-  console.log("Copied CSS files");
+  await fs.cp(
+    "./content/assets",
+    "./dist/assets",
+    { recursive: true }
+  );
+
+  await fs.copyFile("./content/favicon.ico", "./dist/favicon.ico");
+  await fs.copyFile("./content/favicon-16x16.png", "./dist/favicon-16x16.png");
+  await fs.copyFile("./content/favicon-32x32.png", "./dist/favicon-32x32.png");
+
+  console.log("Copied CSS, favicon files and assets");
 
   const posts = await getPosts();
   console.log(`Found ${posts.length} posts`);
 
-  const homepage = pages.generateHomepage(posts);
+  const homepage = pages.PostList(posts);
   await fs.writeFile("./dist/index.html", homepage);
   console.log("Generated index.html");
 
   for (const post of posts) {
-    const postPage = pages.generatePostPage(post);
+    const postPage = pages.PostPage(post);
     await fs.writeFile(`./dist/posts/${post.slug}.html`, postPage);
     console.log(`Generated posts/${post.slug}.html`);
   }

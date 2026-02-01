@@ -11,31 +11,27 @@ ul {
 li {
   margin: 0 0 1.5rem 0;
   padding: 0;
-  border-bottom: 1px solid #f0f0f0;
-  padding-bottom: 1.5rem;
-}
-
-li:last-child {
   border-bottom: none;
+  padding-bottom: 1.5rem;
 }
 
 li p {
   margin: 0 0 0.5rem 0;
   font-size: 0.9rem;
-  color: #6a6a6a;
+  color: #565f89;
   font-variant-numeric: tabular-nums;
 }
 
 li a {
   font-size: 1.25rem;
   font-weight: 500;
-  color: #0a0a0a;
+  color: #f7768e;
   border-bottom: none;
   display: inline-block;
   transition: color 0.2s ease;
 }
 
 li a:hover {
-  color: #0066cc;
+  color: #bb9af7;
   border-bottom: none;
 }
