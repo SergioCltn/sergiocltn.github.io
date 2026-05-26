@@ -28,6 +28,10 @@ function extractTitle(markdown: string): string {
   return titleMatch?.[1] ?? "Untitled";
 }
 
+function stripTopLevelTitle(markdown: string): string {
+  return markdown.replace(/^#\s+.+$(\n\s*)?/m, "").trim();
+}
+
 function stripMarkdown(markdown: string): string {
   return markdown
     .replace(/^#\s+.+$/gm, "")
@@ -80,7 +84,7 @@ async function getPosts(): Promise<Post[]> {
     const markdownContent = await fs.readFile(filePath, "utf-8");
     const title = extractTitle(markdownContent);
     const excerpt = extractExcerpt(markdownContent);
-    const content = await marked.parse(markdownContent);
+    const content = await marked.parse(stripTopLevelTitle(markdownContent));
     const slug = path.basename(file, ".md");
     const date = extractDateFromFilename(slug);
 

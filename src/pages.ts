@@ -9,9 +9,14 @@ type BaseProps = {
   description: string;
   path: string;
   extra_css?: string;
+  activeNav: "blog" | "about";
 }
 
-function Base({ title, children, path, description, extra_css }: BaseProps) {
+function stripFirstHeading(html: string): string {
+  return html.replace(/^\s*<h1[^>]*>.*?<\/h1>\s*/i, "");
+}
+
+function Base({ title, children, path, description, extra_css, activeNav }: BaseProps) {
   return `
   <!DOCTYPE html>
   <html lang="en">
@@ -38,8 +43,8 @@ function Base({ title, children, path, description, extra_css }: BaseProps) {
           </div>
           <nav class="menu">
             <ul class="menu__inner">
-              <li><a href="/">blog</a></li>
-              <li><a href="/about.html">about me</a></li>
+              <li${activeNav === "blog" ? ' class="active"' : ""}><a href="/">blog</a></li>
+              <li${activeNav === "about" ? ' class="active"' : ""}><a href="/about.html">about me</a></li>
             </ul>
           </nav>
         </header>
@@ -95,26 +100,42 @@ export function PostList(posts: Post[]): string {
     title: 'SergioCltn',
     path: '',
     description: general_description,
-    extra_css: 'postlist.css'
+    extra_css: 'postlist.css',
+    activeNav: 'blog'
   });
 }
 
 export function PostPage(post: Post): string {
   return Base({
-    children: `<article class="post">${post.content}</article>`,
+    children: `<article class="post">
+      <h1 class="post-title"><a href="/posts/${post.slug}.html">${post.title}</a></h1>
+      <div class="post-meta-inline">
+        <span class="post-date">${post.date.toISOString().split("T")[0]}</span>
+      </div>
+      <div class="post-content">
+        ${post.content}
+      </div>
+    </article>`,
     title: post.title,
     path: `posts/${post.slug}.html`,
     description: general_description,
-    extra_css: 'post.css'
+    extra_css: 'post.css',
+    activeNav: 'blog'
   });
 }
 
 export function AboutPage(content: string): string {
   return Base({
-    children: `<article class="post">${content}</article>`,
+    children: `<article class="post">
+      <h1 class="post-title"><a href="/about.html">About me</a></h1>
+      <div class="post-content">
+        ${stripFirstHeading(content)}
+      </div>
+    </article>`,
     title: 'About',
     path: 'about.html',
     description: general_description,
-    extra_css: 'post.css'
+    extra_css: 'post.css',
+    activeNav: 'about'
   });
 }

@@ -254,6 +254,10 @@ hr {
   flex: 0 0 auto;
 }
 
+.menu__inner li.active {
+  color: var(--accent-alpha-70);
+}
+
 .menu__inner a {
   text-decoration: underline;
 }

@@ -2,6 +2,29 @@
   list-style: none;
 }
 
+.post-content > :first-child {
+  margin-top: 0;
+}
+
+.post-content a {
+  text-decoration: underline;
+}
+
+.post-content h2,
+.post-content h3,
+.post-content h4 {
+  margin-top: 2.4rem;
+  margin-bottom: 1rem;
+}
+
+.post-content p,
+.post-content ul,
+.post-content ol,
+.post-content blockquote,
+.post-content pre {
+  max-width: 74ch;
+}
+
 .post ul li {
   position: relative;
 }
