@@ -2,6 +2,7 @@ import * as fs from "node:fs/promises";
 import * as pages from "./pages";
 import { getPosts } from "./posts";
 import { parseArgs } from "node:util";
+import { marked } from "marked";
 
 function printHelp() {
   console.log(`
@@ -49,6 +50,11 @@ async function build() {
   const homepage = pages.PostList(posts);
   await fs.writeFile("./dist/index.html", homepage);
   console.log("Generated index.html");
+
+  const aboutMarkdown = await fs.readFile("./content/about.md", "utf-8");
+  const aboutPage = pages.AboutPage(await marked.parse(aboutMarkdown));
+  await fs.writeFile("./dist/about.html", aboutPage);
+  console.log("Generated about.html");
 
   for (const post of posts) {
     const postPage = pages.PostPage(post);

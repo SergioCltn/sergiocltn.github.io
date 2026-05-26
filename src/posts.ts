@@ -8,6 +8,7 @@ type Post = {
   slug: string;
   title: string;
   content: string;
+  excerpt: string;
   date: Date;
 }
 
@@ -25,6 +26,34 @@ const marked = new Marked(
 function extractTitle(markdown: string): string {
   const titleMatch = markdown.match(/^#\s+(.+)$/m);
   return titleMatch?.[1] ?? "Untitled";
+}
+
+function stripMarkdown(markdown: string): string {
+  return markdown
+    .replace(/^#\s+.+$/gm, "")
+    .replace(/```[\s\S]*?```/g, "")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/[>*_-]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function extractExcerpt(markdown: string): string {
+  const withoutTitle = markdown.replace(/^#\s+.+$(\n)?/m, "").trim();
+  const paragraphs = withoutTitle
+    .split(/\n\s*\n/)
+    .map((paragraph) => stripMarkdown(paragraph))
+    .filter(Boolean);
+
+  const excerpt = paragraphs[0] ?? "";
+
+  if (excerpt.length <= 180) {
+    return excerpt;
+  }
+
+  return `${excerpt.slice(0, 177).trimEnd()}...`;
 }
 
 function extractDateFromFilename(filename: string): Date {
@@ -50,11 +79,12 @@ async function getPosts(): Promise<Post[]> {
     const filePath = path.join(contentDir, file);
     const markdownContent = await fs.readFile(filePath, "utf-8");
     const title = extractTitle(markdownContent);
+    const excerpt = extractExcerpt(markdownContent);
     const content = await marked.parse(markdownContent);
     const slug = path.basename(file, ".md");
     const date = extractDateFromFilename(slug);
 
-    posts.push({ slug, title, content, date });
+    posts.push({ slug, title, content, excerpt, date });
   }
 
   return posts;
