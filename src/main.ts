@@ -38,11 +38,7 @@ async function build() {
     { recursive: true }
   );
 
-  await fs.copyFile("./content/favicon.ico", "./dist/favicon.ico");
-  await fs.copyFile("./content/favicon-16x16.png", "./dist/favicon-16x16.png");
-  await fs.copyFile("./content/favicon-32x32.png", "./dist/favicon-32x32.png");
-
-  console.log("Copied CSS, favicon files and assets");
+  console.log("Copied CSS and assets");
 
   const posts = await getPosts();
   console.log(`Found ${posts.length} posts`);

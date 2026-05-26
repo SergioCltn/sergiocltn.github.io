@@ -21,9 +21,7 @@ function Base({ title, children, path, description, extra_css }: BaseProps) {
       <title>${title}</title>
       ${`<meta name="description" content="${description}" />`}
       ${`<link rel="canonical" href=${site_url}${path} />`}
-      <link rel="icon" type="image/x-icon" href="/favicon.ico">
-      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+      <link rel="icon" type="image/svg+xml" href="/assets/favicon-s.svg">
       <link rel="stylesheet" href="/styles/common.css">
       <link rel="stylesheet" href="/styles/highlight.css">
       ${extra_css ? `<link rel="stylesheet" href="/styles/${extra_css}" />` : ''}
